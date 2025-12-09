@@ -12,7 +12,7 @@ export default function Product() {
   const productNow = data[0];
 
   return (
-    <div>
+    <div className="items-center lg:mt-30 lg:flex lg:flex-row lg:gap-30">
       <Image img={productNow.img} />
       <InfoContainer>
         <Type>{productNow.type}</Type>

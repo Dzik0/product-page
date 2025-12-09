@@ -1,6 +1,7 @@
 import img from "/image-product-3.jpg";
 import del from "/icon-delete.svg";
 import { useDataContext } from "./DataProvider";
+import { useCartContext } from "./CartProvider";
 
 interface SingleCartItemProps {
   id: number;
@@ -9,6 +10,7 @@ interface SingleCartItemProps {
 
 export default function SingleCartItem({ id, quantity }: SingleCartItemProps) {
   const { data } = useDataContext();
+  const { removeFromCart } = useCartContext();
 
   const foundItem = data.find((item) => item.id === id);
 
@@ -36,7 +38,11 @@ export default function SingleCartItem({ id, quantity }: SingleCartItemProps) {
           <p className="text-black">${totalPrice}</p>
         </div>
       </div>
-      <button>
+      <button
+        onClick={() => {
+          removeFromCart(id);
+        }}
+      >
         <img src={del} alt="Delete icon" />
       </button>
     </div>

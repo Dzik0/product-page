@@ -6,7 +6,8 @@ interface CartProviderProps {
 
 interface ContextProps {
   cart: Cart[] | undefined;
-  handleCart: (id: number, type: "minus" | "plus") => void;
+  addToCart: (id: number, quan: number) => void;
+  removeFromCart: (id: number) => void;
 }
 
 interface Cart {
@@ -18,9 +19,9 @@ const CartContext = createContext<ContextProps | undefined>(undefined);
 export { CartContext };
 
 export default function CartProvider({ children }: CartProviderProps) {
-  const [cart, setCart] = useState<Cart[]>([{ id: 1, quantity: 6 }]);
+  const [cart, setCart] = useState<Cart[]>([]);
 
-  function handleCart(id: number, type: "minus" | "plus") {
+  /*   function handleCart(id: number, type: "minus" | "plus") {
     const foundItem = cart.find((item) => item.id === id);
 
     if (type === "plus") {
@@ -49,10 +50,28 @@ export default function CartProvider({ children }: CartProviderProps) {
         return;
       }
     }
+  } */
+
+  function removeFromCart(id: number) {
+    setCart((pS) => pS.filter((item) => item.id !== id));
+  }
+
+  function addToCart(id: number, quan: number) {
+    setCart((pS) => {
+      const foundItem = pS.find((item) => item.id === id);
+
+      if (foundItem) {
+        return pS.map((item) =>
+          item.id === id ? { ...item, quantity: item.quantity + quan } : item,
+        );
+      }
+
+      return [...pS, { id: id, quantity: quan }];
+    });
   }
 
   return (
-    <CartContext.Provider value={{ cart, handleCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
       {children}
     </CartContext.Provider>
   );
